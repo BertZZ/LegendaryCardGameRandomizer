@@ -3,8 +3,6 @@ class Randomizer
   def initialize
     @masterminds = ["Skull","Magneto","Loki","Doom"]
     @schemes = ["Portals to the Dark Dimension","Civil War","Cosmic Cube","Virus","Bank Robbery","Skrull Shapeshifters","Killbots","Prision Breakout"]
-    henchmen = ["Doombot Legion","Hand Ninja's","Savage Land Mutates","Sentinals"]
-    villan_groups = ["Brotherhood","Hydra","Enemies of Asgard", "Masters of Evil", "Radiation","Skruls","Spider-Foes"]
     @mastermind = ' '
     @scheme = ' '
     @chosen = []
@@ -46,13 +44,59 @@ class Randomizer
     puts chosen_henchmen
   end
 
-  def setup(players)
-    randomize_heroes
-    randomize_maserminds
-    randomize_schemes
-    randomize_henchmen(players)
+  def randomize_villan_groups(players)
+    villan_groups = ["Brotherhood","Hydra","Enemies of Asgard", "Masters of Evil", "Radiation","Skruls","Spider-Foes"]
+    chosen_villans = []
+    mastermind = @mastermind
+    case mastermind
+    when "Magneto"
+      villan_groups.delete("Brotherhood")
+      chosen_villans << "Brotherhood"
+    when "Loki"
+      villan_groups.delete("Enemies of Asgard")
+      chosen_villans << "Enemies of Asgard"
+    when "Skull"
+      villan_groups.delete("Hydra")
+      chosen_villans << "Hydra"
+    end
+
+    if chosen_villans.length == 0
+      if players == 2
+        vils = villan_groups.sample(2)
+        chosen_villans << vils
+      elsif players == 3 || players == 4
+        vils = villan_groups.sample(3)
+        chosen_villans << vils
+      elsif players == 5
+        vils = villan_groups.sample(4)
+        chosen_villans << vils
+      end
+
+      elsif chosen_villans.length == 1
+        if players == 2
+          vils = villan_groups.sample(1)
+          chosen_villans << vils
+        elsif players == 3 || players == 4
+          vils = villan_groups.sample(2)
+          chosen_villans << vils
+        elsif players == 5
+          vils = villan_groups.sample(3)
+          chosen_villans << vils
+        end
+      end
+      puts chosen_villans
+    end
+
+
+
+    def setup(players)
+      randomize_heroes
+      randomize_maserminds
+      randomize_schemes
+      randomize_henchmen(players)
+      randomize_villan_groups(players)
+    end
   end
-end
 
 randomizer = Randomizer.new
 randomizer.setup(4)
